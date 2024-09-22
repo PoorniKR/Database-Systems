@@ -1,0 +1,175 @@
+use db
+***************************************************************
+CREATE:
+	
+db.createCollection("SUPPLIERS", { 
+ validator: {
+ $jsonSchema: {
+ bsonType: "object",
+ required: ["SUPPLIERID", "SUPPLIERNAME"],
+ properties: { 
+    SUPPLIERID: { bsonType: "number" }, 
+    SUPPLIERNAME: { bsonType: "string" } 
+} } } })
+
+db.createCollection("CUSTOMERS", { 
+ validator: {
+ $jsonSchema: {
+ bsonType: "object",
+ required: ["CUSTOMERID", "CUSTOMERNAME"],
+ properties: { 
+    CUSTOMERID: { bsonType: "number" }, 
+    CUSTOMERNAME: { bsonType: "string" } 
+} } } })
+
+db.createCollection("PRODUCTS", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         required: ["PRODUCTID", "PRODUCTNAME", "DESCRIPTION", "QUANTITYINSTOCK", "PRICE", "SUPPLIERID"],
+         properties: {
+            PRODUCTID: { bsonType: "number" },
+            PRODUCTNAME: { bsonType: "string" },
+            DESCRIPTION: { bsonType: "string" },
+            QUANTITYINSTOCK: { bsonType: "number" },
+            PRICE: { bsonType: "number" },
+            SUPPLIERID: { bsonType: "number" }
+} } } })
+
+db.createCollection("ORDERS", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         required: ["ORDERID", "ORDERDATE", "CUSTOMERID", "PRODUCTID", "QUANTITY"],
+         properties: {
+            ORDERID: { bsonType: "number" },
+            ORDERDATE: { bsonType: "date" },
+            CUSTOMERID: { bsonType: "number" },
+            PRODUCTID: { bsonType: "number" },
+            QUANTITY: { bsonType: "number" }
+         }
+      }
+   }
+})
+
+************************************************************************************************************************
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1001, SUPPLIERNAME: 'ABC Electronics' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1002, SUPPLIERNAME: 'XYZ Manufacturing' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1003, SUPPLIERNAME: 'GHI Suppliers' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1004, SUPPLIERNAME: 'LMN Distributors' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1005, SUPPLIERNAME: 'PQR Tech' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1006, SUPPLIERNAME: 'RST Components' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1007, SUPPLIERNAME: 'UVW Solutions' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1008, SUPPLIERNAME: 'JKL Enterprises' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1009, SUPPLIERNAME: 'MNO Industries' })
+db.SUPPLIERS.insertOne({ SUPPLIERID: 1010, SUPPLIERNAME: 'EFG Imports' })
+
+
+db.PRODUCTS.insertOne({
+   PRODUCTID: 2001,
+   PRODUCTNAME: 'Laptop',
+   DESCRIPTION: 'High-performance laptop with SSD storage',
+   QUANTITYINSTOCK: 50,
+   PRICE: 899.99,
+   SUPPLIERID: 1001
+})
+db.PRODUCTS.insertOne({
+   PRODUCTID: 2002,
+   PRODUCTNAME: 'Smartphone',
+   DESCRIPTION: '5G-enabled smartphone with dual cameras',
+   QUANTITYINSTOCK: 100,
+   PRICE: 699.99,
+   SUPPLIERID: 1002
+})
+db.PRODUCTS.insertOne({
+   PRODUCTID: 2003,
+   PRODUCTNAME: 'Wireless Mouse',
+   DESCRIPTION: 'Ergonomic wireless mouse',
+   QUANTITYINSTOCK: 200,
+   PRICE: 29.99,
+   SUPPLIERID: 1003
+})
+db.PRODUCTS.insertOne({
+   PRODUCTID: 2004,
+   PRODUCTNAME: 'External Hard Drive',
+   DESCRIPTION: 'Portable external hard drive',
+   QUANTITYINSTOCK: 80,
+   PRICE: 149.99,
+   SUPPLIERID: 1004
+})
+db.PRODUCTS.insertOne({
+   PRODUCTID: 2005,
+   PRODUCTNAME: 'Bluetooth Speaker',
+   DESCRIPTION: 'Waterproof Bluetooth speaker',
+   QUANTITYINSTOCK: 120,
+   PRICE: 79.99,
+   SUPPLIERID: 1005
+})
+
+db.CUSTOMERS.insertOne({ CUSTOMERID: 9001, CUSTOMERNAME: 'Poornima' })
+db.CUSTOMERS.insertOne({ CUSTOMERID: 9002, CUSTOMERNAME: 'Hariharan' })
+db.CUSTOMERS.insertOne({ CUSTOMERID: 9003, CUSTOMERNAME: 'Mani' })
+db.CUSTOMERS.insertOne({ CUSTOMERID: 9004, CUSTOMERNAME: 'Aishwarya' })
+db.CUSTOMERS.insertOne({ CUSTOMERID: 9005, CUSTOMERNAME: 'Abinaya' })
+
+db.ORDERS.insertOne({
+      ORDERID: 5001,
+      ORDERDATE: new Date('2024-01-01'),
+      CUSTOMERID: 9001,
+      PRODUCTID: 2001,
+      QUANTITY: 2
+})
+db.ORDERS.insertOne({
+      ORDERID: 5002,
+      ORDERDATE: new Date('2024-01-02'),
+      CUSTOMERID: 9002,
+      PRODUCTID: 2002,
+      QUANTITY: 3
+})
+db.ORDERS.insertOne({
+      ORDERID: 5003,
+      ORDERDATE: new Date('2024-01-03'),
+      CUSTOMERID: 9003,
+      PRODUCTID: 2003,
+      QUANTITY: 1
+})
+db.ORDERS.insertOne({
+      ORDERID: 5004,
+      ORDERDATE: new Date('2024-01-04'),
+      CUSTOMERID: 9004,
+      PRODUCTID: 2001,
+      QUANTITY: 1
+})
+db.ORDERS.insertOne({
+      ORDERID: 5005,
+      ORDERDATE: new Date('2024-01-05'),
+      CUSTOMERID: 9005,
+      PRODUCTID: 2004,
+      QUANTITY: 2
+})
+
+*************************************************************************************************
+READ:
+
+db.PRODUCTS.find()
+db.SUPPLIERS.find()
+db.CUSTOMERS.find()
+db.ORDERS.find()
+
+db.ORDERS.find({PRODUCTID:2001})
+*************************************************************************************************
+UPDATE AND DELETE:
+
+db.CUSTOMERS.updateOne({CUSTOMERID:9003},{$set:{CUSTOMERNAME:"Manibharathi"}})
+db.PRODUCTS.updateOne({PRODUCTID:2004},{$set:{QUANTITYINSTOCK:60,PRICE:200.00}})
+
+db.SUPPLIERS.deleteOne({SUPPLIERID:1010})
+*************************************************************************************************
+To find the total quantity of each product ordered, and then you want to look up additional information about each product from the PRODUCTS collection:
+
+db.ORDERS.aggregate([{$group: {_id: "$PRODUCTID",totalQuantity: { $sum: "$QUANTITY" }}},{$lookup: {from: "PRODUCTS",localField: "_id",foreignField: "PRODUCTID",as: "productInfo"}}])
+
+To find average quantity:
+
+db.ORDERS.aggregate([{$group: {_id: "$CUSTOMERID",averageQuantity: { $avg: "$QUANTITY" }}}])
+
